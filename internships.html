@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<<link rel="stylesheet" href="style.css">>
+    <title>Internships</title>
+</head>
+
+<body>
+
+   <h1>Nearby Internships 💼</h1>
+
+<div class="card-container" id="internshipList"></div>
+
+<h2>Post an Internship</h2>
+
+<form id="internshipForm">
+    <input type="text" id="iname" placeholder="Internship Title" required><br><br>
+    <input type="text" id="ilocation" placeholder="Location" required><br><br>
+    <input type="text" id="iduration" placeholder="Duration" required><br><br>
+    <button type="submit">Submit</button>
+</form>
+
+
+<script>
+
+// Load saved internships
+window.onload = function() {
+    let savedInternships = JSON.parse(localStorage.getItem("internships")) || [];
+    savedInternships.forEach(addInternshipToPage);
+};
+
+document.getElementById("internshipForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let title = document.getElementById("iname").value;
+    let location = document.getElementById("ilocation").value;
+    let duration = document.getElementById("iduration").value;
+
+    let internship = { title, location, duration };
+
+    let savedInternships = JSON.parse(localStorage.getItem("internships")) || [];
+    savedInternships.push(internship);
+
+    localStorage.setItem("internships", JSON.stringify(savedInternships));
+
+    addInternshipToPage(internship);
+
+    document.getElementById("internshipForm").reset();
+});
+
+function addInternshipToPage(internship) {
+    let newCard = document.createElement("div");
+    newCard.className = "card";
+
+    newCard.innerHTML = `
+        <h3>${internship.title}</h3>
+        <p>📍 ${internship.location}</p>
+        <p>⏳ ${internship.duration}</p>
+        <button>Apply Now</button>
+        <button onclick="deleteInternship('${internship.title}')">Delete</button>
+    `;
+
+    document.getElementById("internshipList").appendChild(newCard);
+}
+
+function deleteInternship(title) {
+    let savedInternships = JSON.parse(localStorage.getItem("internships")) || [];
+    savedInternships = savedInternships.filter(i => i.title !== title);
+
+    localStorage.setItem("internships", JSON.stringify(savedInternships));
+
+    location.reload();
+}
+
+</script>
+
+
+</body>
+</html>

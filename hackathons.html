@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hackathons</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<h1>Nearby Hackathons 🔥</h1>
+
+<div class="card-container">
+
+    <div class="card">
+        <h3>JNEC Tech Fest Hackathon</h3>
+        <p>📍 Aurangabad</p>
+        <p>📅 March 2026</p>
+        <button>Apply Now</button>
+    </div>
+
+    <div class="card">
+        <h3>Maharashtra AI Challenge</h3>
+        <p>📍 Pune</p>
+        <p>📅 April 2026</p>
+        <button>Apply Now</button>
+    </div>
+
+</div>
+
+
+
+
+<div class="card-container" id="hackathonList"></div>
+<form id="hackathonForm">
+    <input type="text" id="name" placeholder="Hackathon Name" required><br><br>
+    <input type="text" id="location" placeholder="Location" required><br><br>
+    <input type="text" id="date" placeholder="Date" required><br><br>
+    <button type="submit">Submit</button>
+</form>
+<script>
+
+// Load saved hackathons when page opens
+window.onload = function() {
+    let savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
+    savedHackathons.forEach(addHackathonToPage);
+};
+
+document.getElementById("hackathonForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let location = document.getElementById("location").value;
+    let date = document.getElementById("date").value;
+
+    let hackathon = { name, location, date };
+
+    // Get existing hackathons
+    let savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
+
+    // Add new one
+    savedHackathons.push(hackathon);
+
+    // Save back to local storage
+    localStorage.setItem("hackathons", JSON.stringify(savedHackathons));
+
+    addHackathonToPage(hackathon);
+
+    document.getElementById("hackathonForm").reset();
+});
+
+// Function to add card to page
+function deleteHackathon(name) {
+
+    let savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
+
+    // Remove selected hackathon
+    savedHackathons = savedHackathons.filter(h => h.name !== name);
+
+    // Update storage
+    localStorage.setItem("hackathons", JSON.stringify(savedHackathons));
+
+    // Reload page to update UI
+    location.reload();
+}
+function addHackathonToPage(hackathon) {
+    let newCard = document.createElement("div");
+    newCard.className = "card";
+
+    newCard.innerHTML = `
+    <h3>${hackathon.name}</h3>
+    <p>📍 ${hackathon.location}</p>
+    <p>📅 ${hackathon.date}</p>
+    <button>Apply Now</button>
+    <button onclick="deleteHackathon('${hackathon.name}')">Delete</button>
+`;
+
+    document.getElementById("hackathonList").appendChild(newCard);
+}
+
+</script>
