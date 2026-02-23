@@ -102,6 +102,28 @@ window.deleteHackathon = async function(id) {
   await deleteDoc(doc(db, "hackathons", id));
   loadHackathons();
 };
+
+async function loadHackathons() {
+  const querySnapshot = await getDocs(collection(db, "hackathons"));
+  const container = document.getElementById("hackathonList");
+  container.innerHTML = "";
+
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    card.innerHTML = `
+      <h3>${data.title}</h3>
+      <p>City: ${data.city}</p>
+      <p>Tech: ${data.tech}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+loadHackathons();
 </script>
 loadHackathons();
 </body>
@@ -115,6 +137,8 @@ loadHackathons();
   <input type="text" id="tech" placeholder="Tech Stack (AI, Web, etc)" required>
   <button type="submit">Add Hackathon</button>
 </form>
+
+<div id="hackathonList"></div>
 
 <div class="card-container">
   <div id="hackathonContainer"></div>
