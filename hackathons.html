@@ -34,7 +34,17 @@ function searchHackathons() {
   onkeyup="searchHackathons()"
   style="padding:10px; width:300px; margin:20px;"
 >
+<h2>Post a Hackathon</h2>
+
+<form id="hackathonForm">
+  <input type="text" id="title" placeholder="Hackathon Name" required>
+  <input type="text" id="city" placeholder="City" required>
+  <input type="text" id="tech" placeholder="Tech Stack (AI, Web, etc)" required>
+  <button type="submit">Add Hackathon</button>
+</form>
+
 <div class="card-container">
+  <div id="hackathonContainer"></div>
 
     <div class="card">
         <h3>JNEC Tech Fest Hackathon</h3>
@@ -55,72 +65,8 @@ function searchHackathons() {
 
 
 
-<div class="card-container" id="hackathonList"></div>
-<form id="hackathonForm">
-    <input type="text" id="name" placeholder="Hackathon Name" required><br><br>
-    <input type="text" id="location" placeholder="Location" required><br><br>
-    <input type="text" id="date" placeholder="Date" required><br><br>
-    <button type="submit">Submit</button>
-</form>
-<script>
 
-// Load saved hackathons when page opens
-window.onload = function() {
-    let savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
-    savedHackathons.forEach(addHackathonToPage);
-};
 
-document.getElementById("hackathonForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    let name = document.getElementById("name").value;
-    let location = document.getElementById("location").value;
-    let date = document.getElementById("date").value;
-
-    let hackathon = { name, location, date };
-
-    // Get existing hackathons
-    let savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
-
-    // Add new one
-    savedHackathons.push(hackathon);
-
-    // Save back to local storage
-    localStorage.setItem("hackathons", JSON.stringify(savedHackathons));
-
-    addHackathonToPage(hackathon);
-
-    document.getElementById("hackathonForm").reset();
-});
-
-// Function to add card to page
-function deleteHackathon(name) {
-
-    let savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
-
-    // Remove selected hackathon
-    savedHackathons = savedHackathons.filter(h => h.name !== name);
-
-    // Update storage
-    localStorage.setItem("hackathons", JSON.stringify(savedHackathons));
-
-    // Reload page to update UI
-    location.reload();
-}
-function addHackathonToPage(hackathon) {
-    let newCard = document.createElement("div");
-    newCard.className = "card";
-
-    newCard.innerHTML = `
-    <h3>${hackathon.name}</h3>
-    <p>📍 ${hackathon.location}</p>
-    <p>📅 ${hackathon.date}</p>
-    <button>Apply Now</button>
-    <button onclick="deleteHackathon('${hackathon.name}')">Delete</button>
-`;
-
-    document.getElementById("hackathonList").appendChild(newCard);
-}
 
 </script>
 
@@ -161,3 +107,51 @@ document.getElementById("cityFilter").addEventListener("change", filterHackathon
 <footer>
   <p>&copy; 2026 HackNear. All rights reserved.</p>
 </footer>
+
+
+
+
+<script>
+
+// Load existing hackathons from local storage
+document.addEventListener("DOMContentLoaded", function () {
+  const savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
+  savedHackathons.forEach(addCardToPage);
+});
+
+// Handle form submit
+document.getElementById("hackathonForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const title = document.getElementById("title").value;
+  const city = document.getElementById("city").value;
+  const tech = document.getElementById("tech").value;
+
+  const hackathon = { title, city, tech };
+
+  addCardToPage(hackathon);
+
+  // Save to local storage
+  const saved = JSON.parse(localStorage.getItem("hackathons")) || [];
+  saved.push(hackathon);
+  localStorage.setItem("hackathons", JSON.stringify(saved));
+
+  this.reset();
+});
+
+function addCardToPage(hackathon) {
+  const container = document.getElementById("hackathonContainer");
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.innerHTML = `
+    <h3>${hackathon.title}</h3>
+    <p><strong>City:</strong> ${hackathon.city}</p>
+    <p><strong>Tech:</strong> ${hackathon.tech}</p>
+  `;
+
+  container.appendChild(card);
+}
+
+</script>
