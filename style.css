@@ -152,3 +152,88 @@ form {
 button {
     margin-top: 10px;
 }
+
+
+
+
+
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+  border-radius: 0 0 50% 50% / 0 0 10% 10%;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.hero .btn {
+  background-color: white;
+  color: #2575fc;
+  padding: 12px 25px;
+  margin: 5px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.hero .btn:hover {
+  background-color: #e0e0e0;
+}
+
+.hero .btn.secondary {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.hero .btn.secondary:hover {
+  background-color: white;
+  color: #2575fc;
+}
+
+
+
+
+
+
+
+
+
+
+.card {
+  background-color: white;
+  width: 300px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+
+
+
+footer {
+  background-color: #2575fc;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 50px;
+  border-radius: 20px 20px 0 0;
+}
