@@ -34,6 +34,79 @@ function searchHackathons() {
   onkeyup="searchHackathons()"
   style="padding:10px; width:300px; margin:20px;"
 >
+
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } 
+from "https://www.gstatic.com/firebasejs/10.x.x/firebase-firestore.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAzWJcP9rKDt9YY3O0c-JvL14aYaxWDQD0",
+    authDomain: "hacknear-e9ebc.firebaseapp.com",
+    projectId: "hacknear-e9ebc",
+    storageBucket: "hacknear-e9ebc.firebasestorage.app",
+    messagingSenderId: "891891328952",
+    appId: "1:891891328952:web:4b7d0256eca840420d114d"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  document.getElementById("hackathonForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById("title").value;
+  const city = document.getElementById("city").value;
+  const tech = document.getElementById("tech").value;
+
+  await addDoc(collection(db, "hackathons"), {
+    title,
+    city,
+    tech
+  });
+
+  loadHackathons();
+  e.target.reset();
+});
+
+async function loadHackathons() {
+  const container = document.getElementById("hackathonContainer");
+  container.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "hackathons"));
+  querySnapshot.forEach((docSnap) => {
+    const hackathon = docSnap.data();
+    const id = docSnap.id;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${hackathon.title}</h3>
+      <p><strong>City:</strong> ${hackathon.city}</p>
+      <p><strong>Tech:</strong> ${hackathon.tech}</p>
+      <button onclick="deleteHackathon('${id}')">Delete</button>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+window.deleteHackathon = async function(id) {
+  await deleteDoc(doc(db, "hackathons", id));
+  loadHackathons();
+};
+</script>
+loadHackathons();
+</body>
+
+
 <h2>Post a Hackathon</h2>
 
 <form id="hackathonForm">
@@ -113,31 +186,7 @@ document.getElementById("cityFilter").addEventListener("change", filterHackathon
 
 <script>
 
-// Load existing hackathons from local storage
-document.addEventListener("DOMContentLoaded", function () {
-  const savedHackathons = JSON.parse(localStorage.getItem("hackathons")) || [];
-  savedHackathons.forEach(addCardToPage);
-});
 
-// Handle form submit
-document.getElementById("hackathonForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const title = document.getElementById("title").value;
-  const city = document.getElementById("city").value;
-  const tech = document.getElementById("tech").value;
-
-  const hackathon = { title, city, tech };
-
-  addCardToPage(hackathon);
-
-  // Save to local storage
-  const saved = JSON.parse(localStorage.getItem("hackathons")) || [];
-  saved.push(hackathon);
-  localStorage.setItem("hackathons", JSON.stringify(saved));
-
-  this.reset();
-});
 
 function addCardToPage(hackathon) {
   const container = document.getElementById("hackathonContainer");
@@ -168,3 +217,6 @@ function deleteHackathon(button) {
 }
 
 </script>
+
+
+</body>
