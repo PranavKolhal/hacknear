@@ -146,12 +146,25 @@ function addCardToPage(hackathon) {
   card.className = "card";
 
   card.innerHTML = `
-    <h3>${hackathon.title}</h3>
-    <p><strong>City:</strong> ${hackathon.city}</p>
-    <p><strong>Tech:</strong> ${hackathon.tech}</p>
-  `;
-
+  <h3>${hackathon.title}</h3>
+  <p><strong>City:</strong> ${hackathon.city}</p>
+  <p><strong>Tech:</strong> ${hackathon.tech}</p>
+  <button onclick="deleteHackathon(this)">Delete</button>
+`;
   container.appendChild(card);
+}
+
+function deleteHackathon(button) {
+  const card = button.parentElement;
+  const title = card.querySelector("h3").innerText;
+
+  // Remove from page
+  card.remove();
+
+  // Remove from local storage
+  let saved = JSON.parse(localStorage.getItem("hackathons")) || [];
+  saved = saved.filter(h => h.title !== title);
+  localStorage.setItem("hackathons", JSON.stringify(saved));
 }
 
 </script>
