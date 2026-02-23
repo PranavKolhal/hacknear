@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html>
+
+
+    <script>
+function searchHackathons() {
+  let input = document.getElementById("searchInput").value.toLowerCase();
+  let cards = document.getElementsByClassName("card");
+
+  for (let i = 0; i < cards.length; i++) {
+    let text = cards[i].innerText.toLowerCase();
+
+    if (text.includes(input)) {
+      cards[i].style.display = "block";
+    } else {
+      cards[i].style.display = "none";
+    }
+  }
+}
+</script>
+
+
 <head>
     <title>Hackathons</title>
     <link rel="stylesheet" href="style.css">
@@ -7,6 +27,13 @@
 
 <h1>Nearby Hackathons 🔥</h1>
 
+<input 
+  type="text" 
+  id="searchInput" 
+  placeholder="Search by name, city or tech..."
+  onkeyup="searchHackathons()"
+  style="padding:10px; width:300px; margin:20px;"
+>
 <div class="card-container">
 
     <div class="card">
@@ -95,4 +122,34 @@ function addHackathonToPage(hackathon) {
     document.getElementById("hackathonList").appendChild(newCard);
 }
 
+</script>
+
+
+
+
+<script>
+// Combined Search + City Filter
+function filterHackathons() {
+  let input = document.getElementById("searchInput").value.toLowerCase();
+  let selectedCity = document.getElementById("cityFilter").value.toLowerCase();
+  let cards = document.getElementsByClassName("card");
+
+  for (let i = 0; i < cards.length; i++) {
+    let text = cards[i].innerText.toLowerCase();
+
+    // Check both search input AND city
+    if ((input === "" || text.includes(input)) && 
+        (selectedCity === "" || text.includes(selectedCity))) {
+      cards[i].style.display = "block";
+    } else {
+      cards[i].style.display = "none";
+    }
+  }
+}
+
+// Call combined filter when user types
+document.getElementById("searchInput").addEventListener("keyup", filterHackathons);
+
+// Call combined filter when user selects city
+document.getElementById("cityFilter").addEventListener("change", filterHackathons);
 </script>
